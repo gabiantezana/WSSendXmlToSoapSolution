@@ -14,7 +14,6 @@ namespace Model.Query
 {
     public class DbQuery : IDbQuery
     {
-        private SqlConnection connection = null;
         private readonly string connectionString;
         private readonly string SCHEMA;
         private readonly IEventLogStore CsvGeneratorLog;
@@ -23,7 +22,7 @@ namespace Model.Query
         {
             CsvGeneratorLog = csvGeneratorLog;
             this.connectionString = ConfigurationManager.ConnectionStrings["SAPSQlContext"].ConnectionString;
-            this.SCHEMA = ConfigurationSettings.AppSettings.Get("schema").ToString();
+            this.SCHEMA = ConfigurationManager.AppSettings["schema"].ToString();
         }
 
         /// <summary>
@@ -45,7 +44,7 @@ namespace Model.Query
                                     "\"ADQUIR_idtipopersona\", \"ADQUIR_idactividadeconomica\", \"ADQUIR_nombrecomercial\", \"ADQUIR_idciudad\", \"ADQUIR_direccion\", \"ADQUIR_codigopostal\", \"ADQUIR_nombres\", \"ADQUIR_apellidos\",  " +
                                     "\"ADQUIR_idtipodocumentoidentidad\", \"ADQUIR_identificacion\", \"ADQUIR_digitoverificacion\", \"ADQUIR_idtiporegimen\", \"ADQUIR_DIR_idciudad\", \"ADQUIR_DIR_direccion\", \"ADQUIR_DIR_codigopostal\",  " +
                                     "\"ADQUIR_matriculamercantil\", \"ADQUIR_emailcontacto\", \"ADQUIR_emailentrega\", \"ADQUIR_telefono\", \"ADQUIR_obligaciones\",\"ORDENC_codigo\", \"TOTAL_totalbruto\", \"TOTAL_baseimponible\", \"TOTAL_totalbrutoconimpuestos\",  " +
-                                    "\"TOTAL_totaldescuento\", \"TOTAL_totalcargos\", \"TOTAL_totalanticipos\", \"TOTAL_totalapagar\", \"TOTAL_payableroundingamount\"  from " + SCHEMA + ".\"DATOS_GENERALES\"";
+                                    "\"TOTAL_totaldescuento\", \"TOTAL_totalcargos\", \"TOTAL_totalanticipos\", \"TOTAL_totalapagar\", \"TOTAL_payableroundingamount\"  from \"" + SCHEMA + "\".\"DATOS_GENERALES\"";
 
 
                 //using (connection = new SqlConnection(connectionString))
@@ -277,22 +276,28 @@ namespace Model.Query
         private DataTable QueryResult(string connection, string queryString)
         {
             HanaConnection hconn = new HanaConnection(connection);
+            try
+            {
+                hconn.Open();
 
-            hconn.Open();
+                //HanaDataAdapter da = new HanaDataAdapter(queryString, hconn);
+                //CsvGeneratorLog.StoreLog($"Conexión : Conexión Realizada", EventLogEntryType.Error);
+                HanaCommand hc = new HanaCommand(queryString, hconn);
 
-            //HanaDataAdapter da = new HanaDataAdapter(queryString, hconn);
-            //CsvGeneratorLog.StoreLog($"Conexión : Conexión Realizada", EventLogEntryType.Error);
-            HanaCommand hc = new HanaCommand(queryString, hconn);
+                DataTable dt = new DataTable();
+                // CsvGeneratorLog.StoreLog($"Conexión : Consulta Ejecutada", EventLogEntryType.Error);
 
-            DataTable dt = new DataTable();
-           // CsvGeneratorLog.StoreLog($"Conexión : Consulta Ejecutada", EventLogEntryType.Error);
-
-            HanaDataReader hr = hc.ExecuteReader();
-            //da.Fill(dt);
-            dt.Load(hr);
-            hr.Close();
-            hconn.Close();
-            return dt;
+                HanaDataReader hr = hc.ExecuteReader();
+                //da.Fill(dt);
+                dt.Load(hr);
+                hr.Close();
+                hconn.Close();
+                return dt;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
         }
 
         /// <summary>

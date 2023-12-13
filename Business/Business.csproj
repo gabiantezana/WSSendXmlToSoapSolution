@@ -31,10 +31,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Web.Services" />
@@ -48,6 +49,7 @@
   <ItemGroup>
     <Compile Include="GeneralProcess.cs" />
     <Compile Include="Interfaces\IGeneralProcess.cs" />
+    <Compile Include="Interfaces\IRestProcess.cs" />
     <Compile Include="Interfaces\IXmlProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -56,6 +58,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Interfaces\ISoapProcess.cs" />
+    <Compile Include="Rest\RestProcess.cs" />
     <Compile Include="Soap\SoapProcess.cs" />
     <Compile Include="Web References\WSFacturacion\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -108,8 +111,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Entities\Entities.csproj">
+      <Project>{45d1471a-3a94-4243-b4de-f0b099e44f32}</Project>
+      <Name>Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Log\Log.csproj">
-      <Project>{3517E9E7-6DAD-473B-8110-BD7BB013C0AC}</Project>
+      <Project>{3517e9e7-6dad-473b-8110-bd7bb013c0ac}</Project>
       <Name>Log</Name>
     </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">

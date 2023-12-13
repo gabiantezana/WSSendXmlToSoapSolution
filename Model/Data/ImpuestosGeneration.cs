@@ -33,7 +33,7 @@ namespace Model.Data
 				DataTable ImpuestosTable = dbQuery.GetImpuestosData();
 				return GenerateList(ImpuestosTable);
 			}
-			catch (Exception exp)
+			catch (Exception)
 			{
 				return null;
 			}

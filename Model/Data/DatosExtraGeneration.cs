@@ -33,7 +33,7 @@ namespace Model.Data
 				DataTable DatosExtraTable = dbQuery.GetDatosExtraData();
 				return GenerateList(DatosExtraTable);
 			}
-			catch (Exception exp)
+			catch (Exception)
 			{
 				return null;
 			}

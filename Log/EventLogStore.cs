@@ -12,7 +12,7 @@ namespace Log
     public class EventLogStore : IEventLogStore
     {
         //Esta ruta esta configurada en el archivo de configuracion
-        private string LogPath = ConfigurationSettings.AppSettings.Get("LogPath").ToString();
+        private string LogPath = ConfigurationManager.AppSettings["LogPath"].ToString();
         public EventLogStore()
         {
 

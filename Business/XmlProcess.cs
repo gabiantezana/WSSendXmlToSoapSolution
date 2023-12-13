@@ -15,7 +15,7 @@ namespace Business
 {
     public class XmlProcess : IXmlProcess
     {
-        private string XmlPath = ConfigurationSettings.AppSettings.Get("XmlPath").ToString();
+        private string XmlPath = ConfigurationManager.AppSettings["XmlPath"].ToString(); 
         private readonly IEventLogStore CsvGeneratorLog;
 
         public XmlProcess(IEventLogStore csvGeneratorLog)

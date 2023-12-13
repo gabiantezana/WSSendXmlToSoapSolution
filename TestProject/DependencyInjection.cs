@@ -1,5 +1,4 @@
 ﻿using Business;
-using Business.Soap;
 using Log;
 using Model.Data;
 using Model.Query;
@@ -18,7 +17,6 @@ namespace TestProject
         {
             this.Bind<IEventLogStore>().To<EventLogStore>().InSingletonScope();
             this.Bind<IGeneralProcess>().To<GeneralProcess>().InSingletonScope();
-            this.Bind<ISoapProcess>().To<SoapProcess>().InSingletonScope();
             this.Bind<IXmlProcess>().To<XmlProcess>().InSingletonScope();
             this.Bind<IAnticiposGeneration>().To<AnticiposGeneration>().InSingletonScope();
             this.Bind<IDbQuery>().To<DbQuery>().InSingletonScope();

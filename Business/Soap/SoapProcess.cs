@@ -11,8 +11,8 @@ namespace Business.Soap
     {
         private string token = "";
         private readonly IEventLogStore CsvGeneratorLog;
-        private string SoapUser = ConfigurationSettings.AppSettings.Get("SoapUser").ToString();
-        private string SoapPassword = ConfigurationSettings.AppSettings.Get("SoapPassword").ToString();
+        private string SoapUser = ConfigurationManager.AppSettings["SoapUser"].ToString();
+        private string SoapPassword = ConfigurationManager.AppSettings["SoapPassword"].ToString();
         public SoapProcess(IEventLogStore csvGeneratorLog)
         {
             CsvGeneratorLog = csvGeneratorLog;

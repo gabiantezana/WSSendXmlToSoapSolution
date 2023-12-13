@@ -33,7 +33,7 @@ namespace Model.Data
 				DataTable ItemsTable = dbQuery.GetItemsData();
 				return GenerateList(ItemsTable);
 			}
-			catch (Exception exp)
+			catch (Exception)
 			{
 				return null;
 			}

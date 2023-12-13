@@ -56,11 +56,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Business\Business.csproj">
-      <Project>{5cfe3ecc-7a1c-4359-8bba-a5dc6ee106c9}</Project>
+      <Project>{5CFE3ECC-7A1C-4359-8BBA-A5DC6EE106C9}</Project>
       <Name>Business</Name>
     </ProjectReference>
     <ProjectReference Include="..\Log\Log.csproj">
-      <Project>{3517E9E7-6DAD-473B-8110-BD7BB013C0AC}</Project>
+      <Project>{3517e9e7-6dad-473b-8110-bd7bb013c0ac}</Project>
       <Name>Log</Name>
     </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">

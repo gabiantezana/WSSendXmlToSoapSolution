@@ -1,28 +1,22 @@
 ﻿using Business;
 using Log;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Configuration;
-using System.Data;
 using System.Diagnostics;
-using System.Linq;
 using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WSSendXmlToSoap
 {
     public partial class Process : ServiceBase
     {
         private bool ActiveProccess = false;
-        private string ServiceName = ConfigurationSettings.AppSettings.Get("ServiceName").ToString();
-        private string ProcessName = ConfigurationSettings.AppSettings.Get("ProcessName").ToString();
+        private string ProcessName = ConfigurationManager.AppSettings["ProcessName"].ToString();
         private readonly IEventLogStore CsvGeneratorLog;
         private readonly IGeneralProcess generalProcess;
         public Process()
         {
             InitializeComponent();
+            ServiceName = ConfigurationManager.AppSettings["ServiceName"].ToString();
         }
 
         public Process(IEventLogStore _CsvGeneratorLog, IGeneralProcess _generalProcess)
@@ -39,7 +33,7 @@ namespace WSSendXmlToSoap
 		/// <returns> void  </returns>
         protected override void OnStart(string[] args)
         {
-            CsvGeneratorLog.StoreLog($"El servicio {ServiceName} se ha inicio. ", EventLogEntryType.Information);
+            CsvGeneratorLog.StoreLog($"El servicio {ServiceName} se ha iniciado. ", EventLogEntryType.Information);
             System.Timers.Timer timer = new System.Timers.Timer();
             timer.Interval = 60000; // 60 seconds  
             timer.Elapsed += timer_Elapsed;

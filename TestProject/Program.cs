@@ -1,5 +1,5 @@
 ﻿using Business;
-using Business.Soap;
+using Business.Rest;
 using Log;
 using Model.Data;
 using Model.Query;
@@ -16,17 +16,24 @@ namespace TestProject
     {
         static void Main(string[] args)
         {
+            //if (WebClient.SendLogin("890400284", "Abc123$$").Result)
+            {
+                //_ = WebClient.SendRequest("09dd24e0-6cb5-4afa-951b-3a1183f594a4", "").Result;
+            }
+
             //Se genera una nueva instacia del tipo StandardKernel para la injeccion de dependencias
             var kernel = new StandardKernel(new DependencyInjection());
             var log = kernel.Get<EventLogStore>();
-            var soap = kernel.Get<SoapProcess>();
+            var rest = kernel.Get<RestProcess>();
             var process = kernel.Get<XmlProcess>();
             var general = kernel.Get<GeneralDataGeneration>();
             var query = kernel.Get<DbQuery>();
 
-            GeneralProcess p = new GeneralProcess(log, soap, process, general, query);
+            GeneralProcess p = new GeneralProcess(log, rest, process, general, query);
             p.MainProcess();
+
             
-    }
+
+        }
     }
 }
