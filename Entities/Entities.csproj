@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FactureApi\Xml\FacturaXml.cs" />
     <Compile Include="QueryResults\AnticipoDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -59,9 +60,7 @@
     <Compile Include="FactureApi\ResponseObject.cs" />
     <Compile Include="QueryResults\DescuentoDto.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="FactureApi\Xml\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>

@@ -33,8 +33,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
+    <Reference Include="Ninject, Version=4.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.4.0.0-beta.1\lib\net46\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -58,6 +58,10 @@
     <ProjectReference Include="..\Business\Business.csproj">
       <Project>{5CFE3ECC-7A1C-4359-8BBA-A5DC6EE106C9}</Project>
       <Name>Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Entities\Entities.csproj">
+      <Project>{45d1471a-3a94-4243-b4de-f0b099e44f32}</Project>
+      <Name>Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Log\Log.csproj">
       <Project>{3517e9e7-6dad-473b-8110-bd7bb013c0ac}</Project>
