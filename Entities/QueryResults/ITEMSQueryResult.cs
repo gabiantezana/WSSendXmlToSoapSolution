@@ -1,4 +1,4 @@
-public class ITEMSQuery
+public class ITEMSQueryResult
 {
     public string DOCNUM { get; set; }
     public string ITEMS_COD_idestandar { get; set; }

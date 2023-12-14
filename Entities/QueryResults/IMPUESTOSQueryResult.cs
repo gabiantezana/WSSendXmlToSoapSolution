@@ -1,4 +1,4 @@
-public class IMPUESTOSQuery
+public class IMPUESTOSQueryResult
 {
     public string DOCNUM { get; set; }
     public string IMPUESTOS_idimpuesto { get; set; }

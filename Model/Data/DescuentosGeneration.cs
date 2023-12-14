@@ -1,5 +1,4 @@
-﻿using Entities.QueryResults;
-using Log;
+﻿using Log;
 using Model.Query;
 using Model.XmlModel;
 using System;
@@ -55,7 +54,6 @@ namespace Model.Data
 				if (DescuentosTable != null)
 				{
 					XmlCargo Descuento;
-					DescuentoDto descuentoDto;
 					foreach (DataRow drow in DescuentosTable.Rows)
 					{
 						if (drow["DESC_porcentaje"].ToString() != "0.000000")

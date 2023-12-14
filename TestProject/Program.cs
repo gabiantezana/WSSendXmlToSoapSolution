@@ -17,6 +17,7 @@ namespace TestProject
     {
         static void Main(string[] args)
         {
+            /*
 
             var factura = new FacturaXml();
 
@@ -175,12 +176,12 @@ namespace TestProject
             factura.NumeracionDIAN = numeracionDIAN;
 
 
-            System.Xml.Serialization.XmlSerializer x = new System.Xml.Serialization.XmlSerializer(
+            /*System.Xml.Serialization.XmlSerializer x = new System.Xml.Serialization.XmlSerializer(
                 factura.GetType()
             );
             x.Serialize(Console.Out, factura);
             Console.WriteLine();
-            Console.ReadLine();
+            Console.ReadLine();*/
 
             //Se genera una nueva instacia del tipo StandardKernel para la injeccion de dependencias
             var kernel = new StandardKernel(new DependencyInjection());

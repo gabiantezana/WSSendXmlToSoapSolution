@@ -1,4 +1,4 @@
-public class DATOS_EXTRAQuery
+public class DATOS_EXTRAQueryResult
 {
     public string DOCNUM { get; set; }
     public string RETENCIONES_idretencion { get; set; }

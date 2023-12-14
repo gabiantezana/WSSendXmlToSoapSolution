@@ -1,4 +1,4 @@
-public class DESCUENTOSQuery
+public class DESCUENTOSQueryResult
 {
     public string DOCNUM { get; set; }
     public string DESC_idconcepto { get; set; }

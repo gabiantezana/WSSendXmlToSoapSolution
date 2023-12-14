@@ -1,4 +1,4 @@
-public class DATOS_GENERALESQuery
+public class DATOS_GENERALESQueryResult
 {
     public string DOCNUM { get; set; }
     public string idnumeracion { get; set; }
