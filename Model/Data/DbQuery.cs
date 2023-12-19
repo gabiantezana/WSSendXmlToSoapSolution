@@ -88,7 +88,8 @@ namespace Model.Query
         {
             try
             {
-                string queryString = "select \"DOCNUM\", \"ANTICIPO_identificador\", \"ANTICIPO_valor\", \"ANTICIPO_fecha\" from " + SCHEMA + ".\"ANTICIPO\"";
+                //string queryString = "select \"DOCNUM\", \"ANTICIPO_identificador\", \"ANTICIPO_valor\", \"ANTICIPO_fecha\" from " + SCHEMA + ".\"ANTICIPO\"";
+                string queryString = "select * from " + SCHEMA + ".\"ANTICIPO\"";
 
                 //using (connection = new SqlConnection(connectionString))
                 //{
@@ -124,7 +125,8 @@ namespace Model.Query
         {
             try
             {
-                string queryString = "select \"DOCNUM\", \"DESC_idconcepto\", \"DESC_escargo\", \"DESC_descripcion\", \"DESC_porcentaje\", \"DESC_base\", \"DESC_valor\" from " + SCHEMA + ".\"DESCUENTOS\"";
+                //string queryString = "select \"DOCNUM\", \"DESC_idconcepto\", \"DESC_escargo\", \"DESC_descripcion\", \"DESC_porcentaje\", \"DESC_base\", \"DESC_valor\" from " + SCHEMA + ".\"DESCUENTOS\"";
+                string queryString = "select * from " + SCHEMA + ".\"DESCUENTOS\"";
 
                 //using (connection = new SqlConnection(connectionString))
                 //{
@@ -160,7 +162,8 @@ namespace Model.Query
         {
             try
             {
-                string queryString = "select \"DOCNUM\", \"IMPUESTOS_idimpuesto\", \"IMPUESTOS_base\", \"IMPUESTOS_factor\", \"IMPUESTOS_estarifaunitaria\", \"IMPUESTOS_valor\" from " + SCHEMA + ".\"IMPUESTOS\"";
+                //string queryString = "select \"DOCNUM\", \"IMPUESTOS_idimpuesto\", \"IMPUESTOS_base\", \"IMPUESTOS_factor\", \"IMPUESTOS_estarifaunitaria\", \"IMPUESTOS_valor\" from " + SCHEMA + ".\"IMPUESTOS\"";
+                string queryString = "select * from " + SCHEMA + ".\"IMPUESTOS\"";
 
                 //using (connection = new SqlConnection(connectionString))
                 //{
@@ -197,7 +200,8 @@ namespace Model.Query
         {
             try
             {
-                string queryString = "SELECT \"DOCNUM\", \"RETENCIONES_idretencion\", \"RETENCIONES_base\", \"RETENCIONES_factor\", \"RETENCIONES_valor\", \"RETENCIONES_tipo\" FROM " + SCHEMA + ".\"DATOS_EXTRAS\"";
+                //string queryString = "SELECT \"DOCNUM\", \"RETENCIONES_idretencion\", \"RETENCIONES_base\", \"RETENCIONES_factor\", \"RETENCIONES_valor\", \"RETENCIONES_tipo\" FROM " + SCHEMA + ".\"DATOS_EXTRAS\"";
+                string queryString = "SELECT * FROM " + SCHEMA + ".\"DATOS_EXTRAS\"";
 
                 //using (connection = new SqlConnection(connectionString))
                 //{
