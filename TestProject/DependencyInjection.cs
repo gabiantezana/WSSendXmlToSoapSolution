@@ -24,6 +24,7 @@ namespace TestProject
             this.Bind<IImpuestosGeneration>().To<ImpuestosGeneration>().InSingletonScope();
             this.Bind<IItemsGeneration>().To<ItemsGeneration>().InSingletonScope();
             this.Bind<IGeneralDataGeneration>().To<GeneralDataGeneration>().InSingletonScope();
+            this.Bind<IDataGeneration>().To<DataGeneration>().InSingletonScope();
             this.Bind<IDatosExtraGeneration>().To<DatosExtraGeneration>().InSingletonScope();
         }
     }

@@ -46,11 +46,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\AnticiposGeneration.cs" />
+    <Compile Include="Data\DataGeneration.cs" />
     <Compile Include="Data\DatosExtraGeneration.cs" />
     <Compile Include="Data\DescuentosGeneration.cs" />
     <Compile Include="Data\GeneralDataGeneration.cs" />
     <Compile Include="Helper\ReflectionHelper.cs" />
     <Compile Include="Interfaces\IDatosExtraGeneration.cs" />
+    <Compile Include="Interfaces\IDataGeneration.cs" />
     <Compile Include="Interfaces\IGeneralDataGeneration.cs" />
     <Compile Include="Interfaces\IAnticiposGeneration.cs" />
     <Compile Include="Interfaces\IDescuentosGeneration.cs" />

@@ -36,7 +36,7 @@ namespace Business.Rest
             }
         }
 
-        public  async Task<bool> ConnectToService()
+        public async Task<bool> ConnectToService()
         {
             using (var httpClient = new HttpClient())
             {
@@ -65,7 +65,7 @@ namespace Business.Rest
             }
         }
 
-        public  async Task<DocumentResponse> SendDocumentToService(string requestId, string documentType, string xmlBody)
+        public async Task<DocumentResponse> SendDocumentToService(string requestId, string documentType, string xmlBody)
         {
             try
             {
@@ -83,13 +83,16 @@ namespace Business.Rest
                     var content = new StringContent(xmlBody, Encoding.UTF8, ApiConstants.APPLICATION_JSON);
                     var response = await httpClient.PostAsync(url, content);
                     var responseContent = await response.Content.ReadAsStringAsync();
+                    if (response.IsSuccessStatusCode)
+                        return new DocumentResponse() { Success = true, Response = responseContent };
+                    return new DocumentResponse() { Success = false, Response = responseContent };
 
-                    return new DocumentResponse() { Success = true, Response = responseContent };
+
                 }
             }
             catch (Exception ex)
             {
-                return new DocumentResponse() { Success = true, Response = ex.ToString() };
+                return new DocumentResponse() { Success = false, Response = ex.ToString() };
             }
         }
     }

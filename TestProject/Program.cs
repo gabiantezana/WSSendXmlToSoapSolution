@@ -188,7 +188,7 @@ namespace TestProject
             var log = kernel.Get<EventLogStore>();
             var rest = kernel.Get<RestProcess>();
             var process = kernel.Get<XmlProcess>();
-            var general = kernel.Get<GeneralDataGeneration>();
+            var general = kernel.Get<DataGeneration>();
             var query = kernel.Get<DbQuery>();
 
             GeneralProcess p = new GeneralProcess(log, rest, process, general, query);

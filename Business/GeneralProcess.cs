@@ -5,11 +5,14 @@ using Model;
 using Model.Data;
 using Model.Query;
 using Model.XmlModel;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Xml.Serialization;
 
 namespace Business
 {
@@ -18,10 +21,10 @@ namespace Business
         private readonly IEventLogStore CsvGeneratorLog;
         private readonly IRestProcess restProcess;
         private readonly IXmlProcess xmlProcess;
-        private readonly IGeneralDataGeneration generalDataGeneration;
+        private readonly IDataGeneration generalDataGeneration;
         private readonly IDbQuery dbquery;
 
-        public GeneralProcess(IEventLogStore csvGeneratorLog, IRestProcess restProcess, IXmlProcess xmlProcess, IGeneralDataGeneration _generalDataGeneration, IDbQuery _dbquery)
+        public GeneralProcess(IEventLogStore csvGeneratorLog, IRestProcess restProcess, IXmlProcess xmlProcess, IDataGeneration _generalDataGeneration, IDbQuery _dbquery)
         {
             CsvGeneratorLog = csvGeneratorLog;
             this.restProcess = restProcess;
@@ -38,15 +41,24 @@ namespace Business
                 if (!restProcess.ConnectToService().Result)
                     return; //  TODO: 
                 //Get documents to process
-                List<Xmldocumento> XmlsToProcess = generalDataGeneration.GenerateDocumentList();
-                foreach (Xmldocumento doc in XmlsToProcess)
+                var documentList = generalDataGeneration.GetFacturas();
+                foreach (var doc in documentList)
                 {
-                    string xmlString = xmlProcess.GetBase64Xml(doc);
+                    var xml = MapToXml(doc);
+
+                    var writer = new StringWriter();
+                    var serializer = new XmlSerializer(typeof(Factura));
+                    serializer.Serialize(writer, xml);
+                    string xmlString = writer.ToString();
+
                     var result = restProcess.SendDocumentToService(new Guid().ToString(), RestProcess.ApiConstants.FACTURA_UBL, xmlString).Result;
+                    Console.WriteLine(result.Response);
+                    Console.WriteLine(xmlString);
+                    Console.Read();
                     if (result.Success)
                     {
                         //Save in db
-                        dbquery.InsertSuccessData(doc.DOCNUM, "id_documento_electronico", "cufe", "qr_data");
+                        dbquery.InsertSuccessData(doc.DATOS_GENERALES.DOCNUM, doc.DATOS_GENERALES.DOCNUM, null, null);
                         dbquery.DeleteRowsM();
                     }
                     else
@@ -55,11 +67,11 @@ namespace Business
                         dbquery.DeleteRowsM();
                         //Si la respuesta del servicio es false (fail) se almacena en el log y no se cambia estado del documento para futuros procesos}
                         CsvGeneratorLog.StoreLog($"Error al enviar el xml y el mensaje : {result.Response}", EventLogEntryType.Warning);
-                        DataTable res = dbquery.GetSeriesName(doc.DOCNUM);
+                        DataTable res = dbquery.GetSeriesName(doc.DATOS_GENERALES.DOCNUM);
                         if (res != null)
                         {
                             string numeracion = res.Rows[0].ItemArray[0].ToString();
-                            dbquery.InsertFailData(doc.DOCNUM, numeracion + "" + doc.numero, result.Response, "R");
+                            dbquery.InsertFailData(doc.DATOS_GENERALES.DOCNUM, numeracion + "" + doc.DATOS_GENERALES.numero, result.Response, "R");
                         }
                     }
                 }
@@ -70,153 +82,168 @@ namespace Business
             }
         }
 
-        /*
-        public void MapToXml(FacturaDto facturaDto)
+
+        public Factura MapToXml(FacturaDto facturaDto)
         {
             var cabecera = new FacturaCabecera
             {
-                Numero = facturaDto.DATOS_GENERALES.DOCNUM,
+                TipoFactura = "FACTURE-UBL",
+                Numero = facturaDto.DATOS_GENERALES.numero,
                 FechaEmision = facturaDto.DATOS_GENERALES.fechadocumento,
                 Vencimiento = facturaDto.DATOS_GENERALES.fechavencimiento,
-                HoraEmision = "",//TODO:
-                Observaciones = "",//TODO:
-                TipoFactura = "FACTURE-UBL",
+                HoraEmision = facturaDto.DATOS_GENERALES.horadocumento,
+                Observaciones = facturaDto.DATOS_GENERALES.notas,
                 FormaDePago = facturaDto.DATOS_GENERALES.FP_idmetodopago,
-                TipoOperacion = "",
+                TipoOperacion = facturaDto.DATOS_GENERALES.tipooperacion,
                 MonedaFactura = facturaDto.DATOS_GENERALES.moneda,
-                FormatoContingencia = "",
                 LineasDeFactura = facturaDto.ITEMS.Count().ToString(),
-                OrdenCompra = 0,
-                Ambiente = 2,
+                OrdenCompra = facturaDto.DATOS_GENERALES.ORDENC_codigo,
+                Ambiente = facturaDto.DATOS_GENERALES.idambiente,
             };
 
             var numeracionDIAN = new FacturaNumeracionDIAN
             {
-                NumeroResolucion = 18760000001,
-                FechaInicio = new DateTime(),
-                FechaFin = new DateTime(),
-                PrefijoNumeracion = string.Empty,
-                ConsecutivoInicial = 1,
-                ConsecutivoFinal = 50000
+                NumeroResolucion = facturaDto.DATOS_GENERALES.idnumeracion,
+                FechaInicio = facturaDto.DATOS_GENERALES.NUM_FechaIni,
+                FechaFin = facturaDto.DATOS_GENERALES.NUM_FechaFin,
+                ConsecutivoInicial = facturaDto.DATOS_GENERALES.NUM_ConsecutivoIni,
+                ConsecutivoFinal = facturaDto.DATOS_GENERALES.NUM_ConsecutivoFin,
             };
 
             var cliente = new FacturaCliente
             {
-                NombreComercial = "",
-                RazonSocial = "",
-                TipoPersona = 1,
-                TipoRegimen = 48,
-                TipoIdentificacion = 31,
-                NumeroIdentificacion = 238832893,
-                DV = 0,
+                NombreComercial = facturaDto.DATOS_GENERALES.ADQUIR_nombrecomercial,
+                RazonSocial = facturaDto.DATOS_GENERALES.ADQUIR_nombrecomercial,
+                TipoPersona = facturaDto.DATOS_GENERALES.ADQUIR_idtipopersona,
+                TipoRegimen = facturaDto.DATOS_GENERALES.ADQUIR_idactividadeconomica,
+                TipoIdentificacion = facturaDto.DATOS_GENERALES.ADQUIR_idtipodocumentoidentidad,
+                NumeroIdentificacion = facturaDto.DATOS_GENERALES.ADQUIR_identificacion,
+                DV = facturaDto.DATOS_GENERALES.ADQUIR_digitoverificacion,
                 Direccion = new FacturaClienteDireccion()
                 {
-                    CodigoDepartamento = 00,
-                    CodigoMunicipio = 99,
-                    CodigoPais = "CO",
-                    CodigoPostal = "",
-                    Direccion = "",
-                    IdiomaPais = "es",
-                    NombreCiudad = "asf",
-                    NombreDepartamento = "",
+                    CodigoMunicipio = facturaDto.DATOS_GENERALES.ADQUIR_idciudad,
+                    CodigoPais = facturaDto.DATOS_GENERALES.ADQUIR_Pais,
+                    CodigoPostal = facturaDto.DATOS_GENERALES.ADQUIR_codigopostal,
+                    Direccion = facturaDto.DATOS_GENERALES.ADQUIR_direccion,
+                    IdiomaPais = facturaDto.DATOS_GENERALES.ADQUIR_IdiomaPais,
+                    NombreCiudad = facturaDto.DATOS_GENERALES.ADQUIR_NombreCiudad,
                 },
                 DireccionFiscal = new FacturaClienteDireccionFiscal()
                 {
-                    CodigoMunicipio = 08001,
-                    CodigoPais = "CO",
-                    NombreCiudad = "Barranquilla",
-                    IdiomaPais = "es",
-                    NombreDepartamento = "Atlantico",
-                    CodigoDepartamento = 08,
-                    Direccion = "CRA 60 No. 75 -102 CEL 3016078164"
+                    CodigoPais = "",
+                    IdiomaPais = "",
+                    Direccion = facturaDto.DATOS_GENERALES.ADQUIR_DIR_direccion,
                 },
                 ObligacionesCliente = new FacturaClienteObligacionesCliente()
                 {
-                    CodigoObligacion = ""
+                    CodigoObligacion = facturaDto.DATOS_GENERALES.ADQUIR_CodigoObligacion,
                 },
                 TributoCliente = new FacturaClienteTributoCliente()
                 {
-                    CodigoTributo = 01,
-                    NombreTributo = "IVA"
+                    CodigoTributo = "",
+                    NombreTributo = ""
                 }
-            };
-
-            var notificacion = new FacturaNotificacion
-            {
-                De = "",
-                Para = "",
-                Tipo = "",
             };
 
             var emisor = new FacturaEmisor
             {
-                TipoPersona = 1,
-                RazonSocial = "",
-                TipoIdentificacion = 22,
-                NumeroIdentificacion = 32932,
-                DV = 3,
+                TipoPersona = "",
+                RazonSocial = facturaDto.DATOS_GENERALES.FACT_nombrecomercial,
+                TipoIdentificacion = "",
+                NumeroIdentificacion = facturaDto.DATOS_GENERALES.FACT_identificacion,
+                DV = facturaDto.DATOS_GENERALES.FACT_digitoverificacion,
                 ObligacionesEmisor = new FacturaEmisorObligacionesEmisor()
                 {
-                    CodigoObligacion = "0-47"
+                    CodigoObligacion = facturaDto.DATOS_GENERALES.FACT_obligaciones,
                 },
                 TributoEmisor = new FacturaEmisorTributoEmisor()
                 {
-                    CodigoTributo = 01,
-                    NombreTributo = "IVA"
+                    CodigoTributo = "",
+                    NombreTributo = ""
                 },
                 Contacto = new FacturaEmisorContacto()
                 {
-                    Nombre = "",
-                    Telefono = "",
-                    Email = "AD",
+                    Nombre = facturaDto.DATOS_GENERALES.FACT_nombres,
+                    Telefono = facturaDto.DATOS_GENERALES.FACT_telefono,
+                    Email = facturaDto.DATOS_GENERALES.FACT_emailcontacto,
                     Notas = "",
                 }
             };
 
-            var retenciones = new FacturaRetenciones()
+            var retenciones = new FacturaRetenciones();
+            foreach (var item in facturaDto.DATOS_EXTRA)
             {
-                Retencion = new FacturaRetencionesRetencion()
+                retenciones.Retencion = new FacturaRetencionesRetencion()
                 {
-                    Nombre = "asdf",
-                    Tipo = 05,
-                    Valor = 3232,
+                    Tipo = item.RETENCIONES_tipo,
+                    Valor = item.RETENCIONES_valor,
                     Subtotal = new FacturaRetencionesRetencionSubtotal()
                     {
-                        Porcentaje = 32,
-                        Valor = 32,
-                        ValorBase = 32,
+                        Porcentaje = item.RETENCIONES_factor,
+                        Valor = item.RETENCIONES_valor,
+                        ValorBase = item.RETENCIONES_base,
                     },
-                }
-            };
+                };
+            }
 
             var totales = new FacturaTotales()
             {
-                Anticipo = 33,
-                BaseImponible = 3232,
-                Bruto = 222,
-                BrutoMasImpuestos = 323,
-                Cargos = 233,
-                Descuentos = 2,
-                General = 2222,
-                Impuestos = 323,
-                Redondeo = 2,
-                Retenciones = 3232,
-                TotalIca = 3223,
+                BaseImponible = facturaDto.DATOS_GENERALES.TOTAL_baseimponible,
+                Bruto = facturaDto.DATOS_GENERALES.TOTAL_totalbruto,
+                BrutoMasImpuestos = facturaDto.DATOS_GENERALES.TOTAL_totalbrutoconimpuestos,
+                Cargos = facturaDto.DATOS_GENERALES.TOTAL_totalcargos,
+                General = facturaDto.DATOS_GENERALES.TOTAL_totalapagar,
             };
 
-            var extensiones = new FacturaExtensiones()
+            var extensiones = new FacturaExtensiones();
+            var datosAdicionales = new List<FacturaExtensionesCampoAdicional>();
+            foreach (var item in facturaDto.DATOS_EXTRA)
             {
-                DatosAdicionales = new FacturaExtensionesCampoAdicional[]
+
+                datosAdicionales.Add(new FacturaExtensionesCampoAdicional
                 {
-                    new FacturaExtensionesCampoAdicional() { Nombre = "adicional1", Valor = "SFDFDF" },
-                    new FacturaExtensionesCampoAdicional() { Nombre = "adicional2", Valor = "" }
-                }
+                    Nombre = item.RETENCIONES_tipo,
+                    Valor = item.RETENCIONES_valor
+                });
             };
+            extensiones.DatosAdicionales = datosAdicionales.ToArray();
 
             var mediosDePago = new FacturaMediosDePago()
             {
-                CodigoMedioPago = 2
+                CodigoMedioPago = facturaDto.DATOS_GENERALES.FP_idmetodopago,
             };
+
+            var notificacion = new FacturaNotificacion()
+            {
+                Tipo = "",
+                De = "",
+                Para = ""
+            };
+
+            var factura = new Factura();
+            var lineas = new List<FacturaLinea>();
+            foreach (var item in facturaDto.ITEMS)
+            {
+                lineas.Add(new FacturaLinea()
+                {
+                    CodificacionVendedor = new FacturaLineaCodificacionVendedor
+                    {
+                        CodigoArticulo = item.ITEMS_COD_codigo
+                    },
+                    Detalle = new FacturaLineaDetalle()
+                    {
+                        Cantidad = item.ITEMS_cantidad,
+                        CantidadBase = item.ITEMS_cantidad,//todo
+                        Descripcion = item.ITEMS_descripcion,
+                        Nota = item.ITEMS_notas,
+                        PrecioUnitario = item.ITEMS_preciounitario,
+                        SubTotalLinea = "",//todo
+                        UnidadCantidadBase = item.ITEMS_COD_codigo,
+                        UnidadMedida = item.ITEMS_unidaddemedida,
+                        ValorTotalItem = item.ITEMS_totalitem,
+                    }
+                }) ;
+            }
 
             factura.Cabecera = cabecera;
             factura.Cliente = cliente;
@@ -225,10 +252,9 @@ namespace Business
             factura.Extensiones = extensiones;
             factura.Linea = null;
             factura.MediosDePago = mediosDePago;
-            factura.Notificacion = notificacion;
             factura.NumeracionDIAN = numeracionDIAN;
+            factura.Linea = lineas.ToArray();
+            return factura;
         }
-    
-    */
     }
 }

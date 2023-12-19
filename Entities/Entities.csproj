@@ -48,7 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FactureApi\Xml\FacturaXml.cs" />
-    <Compile Include="QueryResults\AnticipoDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -58,7 +57,12 @@
     <Compile Include="FactureApi\DocumentResponse.cs" />
     <Compile Include="FactureApi\LoginDto.cs" />
     <Compile Include="FactureApi\ResponseObject.cs" />
-    <Compile Include="QueryResults\DescuentoDto.cs" />
+    <Compile Include="QueryResults\DATOS_EXTRAQueryResult.cs" />
+    <Compile Include="QueryResults\DATOS_GENERALESQueryResult.cs" />
+    <Compile Include="QueryResults\DESCUENTOSQueryResult.cs" />
+    <Compile Include="QueryResults\FacturaDto.cs" />
+    <Compile Include="QueryResults\IMPUESTOSQueryResult.cs" />
+    <Compile Include="QueryResults\ITEMSQueryResult.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

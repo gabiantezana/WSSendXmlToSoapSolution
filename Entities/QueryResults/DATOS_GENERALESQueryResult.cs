@@ -63,4 +63,20 @@ public class DATOS_GENERALESQueryResult
     public string TOTAL_totalcargos { get; set; }
     public string TOTAL_totalanticipos { get; set; }
     public string TOTAL_totalapagar { get; set; }
+
+
+
+    public string ADQUIR_idactividadeconomica { get; set; }//TODO: Create in db
+    public string ADQUIR_codigopostal { get; set; }//TODO: Create in db
+    public string ADQUIR_DIR_idciudad { get; set; }//TODO: Create in db
+    public string ADQUIR_DIR_direccion { get; set; }//TODO: Create in db
+    public string horadocumento { get; set; }//TODO: Create in db
+    public string NUM_FechaIni { get; set; }//TODO: Create in db
+    public string NUM_FechaFin { get; set; }//TODO: Create in db
+    public string NUM_ConsecutivoIni { get; set; }//TODO: Create in db
+    public string NUM_ConsecutivoFin { get; set; }//TODO: Create in db
+    public string ADQUIR_Pais { get; set; }
+    public string ADQUIR_IdiomaPais { get; set; }
+    public string ADQUIR_NombreCiudad { get; set; }
+    public string ADQUIR_CodigoObligacion { get; set; }
 }

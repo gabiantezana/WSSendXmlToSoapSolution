@@ -33,7 +33,7 @@ namespace Model.Query
         {
             try
             {
-                string queryString = "select \"DOCNUM\", \"idnumeracion\", \"numero\", \"idambiente\", \"fechadocumento\", \"fechavencimiento\", \"tipofactura\", \"tipooperacion\", \"notas\", \"moneda\", \"cufe\", \"idreporte\", \"correocopia\", \"FP_idmetodopago\", " +
+                /*string queryString = "select \"DOCNUM\", \"idnumeracion\", \"numero\", \"idambiente\", \"fechadocumento\", \"fechavencimiento\", \"tipofactura\", \"tipooperacion\", \"notas\", \"moneda\", \"cufe\", \"idreporte\", \"correocopia\", \"FP_idmetodopago\", " +
                                     "\"FP_idmediopago\", \"FP_fechavencimiento\", \"FP_identificador\", \"FP_dias\", \"idconceptonota\", \"REF_idnumeracion\", \"REF_numero\", \"TDC_fecha\", \"TDC_moneda\",\"TDC_cambiominimo\", \"TDC_tasarepresentativa\", \"ENT_fecha\", \"ENT_idciudad\",  " +
                                     "\"ENT_direccion\", \"ENT_codigopostal\", \"ENT_TRANS_idtipopersona\", \"ENT_TRANS_idactividadeconomica\", \"ENT_TRANS_nombrecomercial\", \"ENT_TRANS_idciudad\", \"ENT_TRANS_direccion\",  " +
                                     "\"ENT_TRANS_codigopostal\", \"ENT_TRANS_nombres\", \"ENT_TRANS_apellidos\", \"ENT_TRANS_idtipodocumentoidentidad\", \"ENT_TRANS_identificacion\", \"ENT_TRANS_digitoverificacion\",  " +
@@ -45,7 +45,8 @@ namespace Model.Query
                                     "\"ADQUIR_idtipodocumentoidentidad\", \"ADQUIR_identificacion\", \"ADQUIR_digitoverificacion\", \"ADQUIR_idtiporegimen\", \"ADQUIR_DIR_idciudad\", \"ADQUIR_DIR_direccion\", \"ADQUIR_DIR_codigopostal\",  " +
                                     "\"ADQUIR_matriculamercantil\", \"ADQUIR_emailcontacto\", \"ADQUIR_emailentrega\", \"ADQUIR_telefono\", \"ADQUIR_obligaciones\",\"ORDENC_codigo\", \"TOTAL_totalbruto\", \"TOTAL_baseimponible\", \"TOTAL_totalbrutoconimpuestos\",  " +
                                     "\"TOTAL_totaldescuento\", \"TOTAL_totalcargos\", \"TOTAL_totalanticipos\", \"TOTAL_totalapagar\", \"TOTAL_payableroundingamount\"  from \"" + SCHEMA + "\".\"DATOS_GENERALES\"";
-
+            */
+                var queryString = "select *  from \"" + SCHEMA + "\".\"DATOS_GENERALES\"";
 
                 //using (connection = new SqlConnection(connectionString))
                 //{
