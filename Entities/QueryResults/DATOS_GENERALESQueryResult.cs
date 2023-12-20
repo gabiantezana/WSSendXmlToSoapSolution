@@ -48,6 +48,7 @@ public class DATOS_GENERALESQueryResult
     public string ADQUIR_direccion { get; set; }
     public string ADQUIR_nombres { get; set; }
     public string ADQUIR_apellidos { get; set; }
+    public string ADQUIR_idDepartamento { get; set; }
     public string ADQUIR_idtipodocumentoidentidad { get; set; }
     public string ADQUIR_identificacion { get; set; }
     public string ADQUIR_digitoverificacion { get; set; }

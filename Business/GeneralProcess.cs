@@ -130,6 +130,7 @@ namespace Business
                     Direccion = facturaDto.DATOS_GENERALES.ADQUIR_direccion,
                     IdiomaPais = facturaDto.DATOS_GENERALES.ADQUIR_IdiomaPais,
                     NombreCiudad = facturaDto.DATOS_GENERALES.ADQUIR_NombreCiudad,
+                    CodigoDepartamento = facturaDto.DATOS_GENERALES.ADQUIR_idDepartamento
                 },
                 DireccionFiscal = new FacturaClienteDireccionFiscal()
                 {
