@@ -63,6 +63,7 @@
     <Compile Include="QueryResults\FacturaDto.cs" />
     <Compile Include="QueryResults\IMPUESTOSQueryResult.cs" />
     <Compile Include="QueryResults\ITEMSQueryResult.cs" />
+    <Compile Include="QueryResults\OADMQueryResult.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

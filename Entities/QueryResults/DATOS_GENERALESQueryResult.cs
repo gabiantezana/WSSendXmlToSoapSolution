@@ -63,20 +63,24 @@ public class DATOS_GENERALESQueryResult
     public string TOTAL_totalcargos { get; set; }
     public string TOTAL_totalanticipos { get; set; }
     public string TOTAL_totalapagar { get; set; }
-
-
-
-    public string ADQUIR_idactividadeconomica { get; set; }//TODO: Create in db
-    public string ADQUIR_codigopostal { get; set; }//TODO: Create in db
-    public string ADQUIR_DIR_idciudad { get; set; }//TODO: Create in db
-    public string ADQUIR_DIR_direccion { get; set; }//TODO: Create in db
-    public string horadocumento { get; set; }//TODO: Create in db
-    public string NUM_FechaIni { get; set; }//TODO: Create in db
-    public string NUM_FechaFin { get; set; }//TODO: Create in db
-    public string NUM_ConsecutivoIni { get; set; }//TODO: Create in db
-    public string NUM_ConsecutivoFin { get; set; }//TODO: Create in db
+    public string ADQUIR_idactividadeconomica { get; set; }
+    public string ADQUIR_codigopostal { get; set; }
+    public string ADQUIR_DIR_idciudad { get; set; }
+    public string ADQUIR_DIR_direccion { get; set; }
+    public string horadocumento { get; set; }
+    public string NUM_FechaIni { get; set; }
+    public string NUM_FechaFin { get; set; }
+    public string NUM_ConsecutivoIni { get; set; }
+    public string NUM_ConsecutivoFin { get; set; }
     public string ADQUIR_Pais { get; set; }
     public string ADQUIR_IdiomaPais { get; set; }
     public string ADQUIR_NombreCiudad { get; set; }
     public string ADQUIR_CodigoObligacion { get; set; }
+    public string NUM_Prefijo { get; set; }
+
+    public string ADQUIR_CodigoTributo { get; set; }
+    public string ADQUIR_NombreTributo { get; set; }
+    public string FACT_CodigoTributo { get; set; }
+    public string FACT_NombreTributo { get; set; }
+
 }

@@ -52,9 +52,7 @@ namespace Business
                     string xmlString = writer.ToString();
 
                     var result = restProcess.SendDocumentToService(new Guid().ToString(), RestProcess.ApiConstants.FACTURA_UBL, xmlString).Result;
-                    Console.WriteLine(result.Response);
-                    Console.WriteLine(xmlString);
-                    Console.Read();
+                   
                     if (result.Success)
                     {
                         //Save in db
@@ -63,6 +61,11 @@ namespace Business
                     }
                     else
                     {
+
+                        Console.WriteLine(xmlString);
+                        Console.WriteLine(result.Response);
+                        Console.Read();
+
                         //Save in db
                         dbquery.DeleteRowsM();
                         //Si la respuesta del servicio es false (fail) se almacena en el log y no se cambia estado del documento para futuros procesos}
@@ -130,8 +133,8 @@ namespace Business
                 },
                 DireccionFiscal = new FacturaClienteDireccionFiscal()
                 {
-                    CodigoPais = "",
-                    IdiomaPais = "",
+                    //CodigoPais = "",
+                    IdiomaPais = "es",
                     Direccion = facturaDto.DATOS_GENERALES.ADQUIR_DIR_direccion,
                 },
                 ObligacionesCliente = new FacturaClienteObligacionesCliente()
@@ -140,16 +143,16 @@ namespace Business
                 },
                 TributoCliente = new FacturaClienteTributoCliente()
                 {
-                    CodigoTributo = "",
-                    NombreTributo = ""
+                    CodigoTributo = facturaDto.DATOS_GENERALES.ADQUIR_CodigoTributo,
+                    NombreTributo = facturaDto.DATOS_GENERALES.ADQUIR_NombreTributo,
                 }
             };
 
             var emisor = new FacturaEmisor
             {
-                TipoPersona = "",
+                TipoPersona = facturaDto.DATOS_GENERALES.FACT_idtipopersona,
                 RazonSocial = facturaDto.DATOS_GENERALES.FACT_nombrecomercial,
-                TipoIdentificacion = "",
+                TipoIdentificacion = facturaDto.DATOS_GENERALES.FACT_identificacion,
                 NumeroIdentificacion = facturaDto.DATOS_GENERALES.FACT_identificacion,
                 DV = facturaDto.DATOS_GENERALES.FACT_digitoverificacion,
                 ObligacionesEmisor = new FacturaEmisorObligacionesEmisor()
@@ -158,8 +161,8 @@ namespace Business
                 },
                 TributoEmisor = new FacturaEmisorTributoEmisor()
                 {
-                    CodigoTributo = "",
-                    NombreTributo = ""
+                    CodigoTributo = facturaDto.DATOS_GENERALES.FACT_CodigoTributo,
+                    NombreTributo = facturaDto.DATOS_GENERALES.FACT_NombreTributo
                 },
                 Contacto = new FacturaEmisorContacto()
                 {
@@ -233,11 +236,11 @@ namespace Business
                     Detalle = new FacturaLineaDetalle()
                     {
                         Cantidad = item.ITEMS_cantidad,
-                        CantidadBase = item.ITEMS_cantidad,//todo
+                        CantidadBase = item.ITEMS_cantidadBase,
                         Descripcion = item.ITEMS_descripcion,
                         Nota = item.ITEMS_notas,
                         PrecioUnitario = item.ITEMS_preciounitario,
-                        SubTotalLinea = "",//todo
+                        SubTotalLinea = item.ITEMS_totalitem,
                         UnidadCantidadBase = item.ITEMS_COD_codigo,
                         UnidadMedida = item.ITEMS_unidaddemedida,
                         ValorTotalItem = item.ITEMS_totalitem,
@@ -254,6 +257,7 @@ namespace Business
             factura.MediosDePago = mediosDePago;
             factura.NumeracionDIAN = numeracionDIAN;
             factura.Linea = lineas.ToArray();
+            factura.Totales = totales;
             return factura;
         }
     }

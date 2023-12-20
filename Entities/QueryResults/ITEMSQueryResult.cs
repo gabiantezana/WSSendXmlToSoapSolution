@@ -32,4 +32,5 @@ public class ITEMSQueryResult
     public string ITEMS_IMPUES_valor { get; set; }
     public string ITEMS_DT_clave { get; set; }
     public string ITEMS_DT_valor { get; set; }
+    public string ITEMS_cantidadBase { get; set; }
 }
