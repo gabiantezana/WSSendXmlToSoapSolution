@@ -13,7 +13,7 @@ namespace Business.Mapperr
         {
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<Factura, FacturaDto>();
+                cfg.CreateMap<Factura, DocumentDto>();
             });
 
             //Create an Instance of Mapper and return that Instance

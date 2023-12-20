@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-public class FacturaDto
+public class DocumentDto
 {
     public DATOS_GENERALESQueryResult DATOS_GENERALES { get; set; }
     public IEnumerable<DATOS_EXTRAQueryResult> DATOS_EXTRA { get; set; }

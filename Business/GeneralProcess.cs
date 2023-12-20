@@ -86,7 +86,7 @@ namespace Business
         }
 
 
-        public Factura MapToXml(FacturaDto facturaDto)
+        public Factura MapToXml(DocumentDto facturaDto)
         {
             var cabecera = new FacturaCabecera
             {

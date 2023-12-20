@@ -9,6 +9,6 @@ namespace Model.Data
 		/// Genera un listado de objetos del tipo Xmldocumento tomando como entrada la respuesta del query de documentos, y los listados de anticipos, Descuentos, Impuestos e Items
 		/// </summary>
 		/// <returns> Devuelve un listado de objetos Xmldocumento los cuales son los documentos a procesar  </returns>
-        List<FacturaDto> GetFacturas();
+        List<DocumentDto> GetFacturas();
     }
 }

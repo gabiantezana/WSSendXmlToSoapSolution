@@ -28,7 +28,7 @@ namespace Model.Data
             this.itemsGeneration = itemsGeneration;
             this.datosExtraGeneration = datosExtraGeneration;
         }
-        public List<FacturaDto> GetFacturas()
+        public List<DocumentDto> GetFacturas()
         {
             //Get raw data
             var datosGenerales = GetDATOS_GENERALESQueryResults();
@@ -37,11 +37,11 @@ namespace Model.Data
             var impuestos = GetIMPUESTOSQueryResults();
             var items = GetITEMSQueryResults();
 
-            var facturas = new List<FacturaDto>();
+            var facturas = new List<DocumentDto>();
             foreach (var item in datosGenerales)
             {
                 var docNum = item.DOCNUM;
-                var factura = new FacturaDto
+                var factura = new DocumentDto
                 {
                     DATOS_GENERALES = item,
                     DATOS_EXTRA = datosExtra.Where(x => x.DOCNUM == docNum),
