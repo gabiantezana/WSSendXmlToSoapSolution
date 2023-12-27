@@ -22,6 +22,8 @@ public partial class NotaDebito
 
     private NotaDebitoLinea[] lineaField;
 
+    private NotaDebitoImpuesto[] impuestosField;
+
     private NotaDebitoMediosDePago mediosDePagoField;
 
     private NotaDebitoNotificacion notificacionField;
@@ -117,6 +119,20 @@ public partial class NotaDebito
         set
         {
             this.lineaField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlArrayItemAttribute("Impuesto", IsNullable = false)]
+    public NotaDebitoImpuesto[] Impuestos
+    {
+        get
+        {
+            return this.impuestosField;
+        }
+        set
+        {
+            this.impuestosField = value;
         }
     }
 
@@ -1483,8 +1499,6 @@ public partial class NotaDebitoLineaDetalle
 
     private string lField;
 
-    private string unidadCantidadBaseField;
-
     /// <remarks/>
     [System.Xml.Serialization.XmlAttributeAttribute()]
     public string Cantidad
@@ -1622,20 +1636,6 @@ public partial class NotaDebitoLineaDetalle
         set
         {
             this.lField = value;
-        }
-    }
-
-    /// <remarks/>
-    [System.Xml.Serialization.XmlAttributeAttribute()]
-    public string UnidadCantidadBase
-    {
-        get
-        {
-            return this.unidadCantidadBaseField;
-        }
-        set
-        {
-            this.unidadCantidadBaseField = value;
         }
     }
 }
@@ -1898,10 +1898,141 @@ public partial class NotaDebitoLineaPrecioReferencia
 [System.SerializableAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
 [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+public partial class NotaDebitoImpuesto
+{
+
+    private NotaDebitoImpuestoSubtotal subtotalField;
+
+    private string valorField;
+
+    private string tipoField;
+
+    private string nombreField;
+
+    /// <remarks/>
+    public NotaDebitoImpuestoSubtotal Subtotal
+    {
+        get
+        {
+            return this.subtotalField;
+        }
+        set
+        {
+            this.subtotalField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Valor
+    {
+        get
+        {
+            return this.valorField;
+        }
+        set
+        {
+            this.valorField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Tipo
+    {
+        get
+        {
+            return this.tipoField;
+        }
+        set
+        {
+            this.tipoField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Nombre
+    {
+        get
+        {
+            return this.nombreField;
+        }
+        set
+        {
+            this.nombreField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.SerializableAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+public partial class NotaDebitoImpuestoSubtotal
+{
+
+    private string valorBaseField;
+
+    private string porcentajeField;
+
+    private string valorField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string ValorBase
+    {
+        get
+        {
+            return this.valorBaseField;
+        }
+        set
+        {
+            this.valorBaseField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Porcentaje
+    {
+        get
+        {
+            return this.porcentajeField;
+        }
+        set
+        {
+            this.porcentajeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Valor
+    {
+        get
+        {
+            return this.valorField;
+        }
+        set
+        {
+            this.valorField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.SerializableAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
 public partial class NotaDebitoMediosDePago
 {
 
     private string codigoMedioPagoField;
+
+    private string formaDePagoField;
+
+    private string vencimientoField;
 
     /// <remarks/>
     [System.Xml.Serialization.XmlAttributeAttribute()]
@@ -1916,6 +2047,34 @@ public partial class NotaDebitoMediosDePago
             this.codigoMedioPagoField = value;
         }
     }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string FormaDePago
+    {
+        get
+        {
+            return this.formaDePagoField;
+        }
+        set
+        {
+            this.formaDePagoField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Vencimiento
+    {
+        get
+        {
+            return this.vencimientoField;
+        }
+        set
+        {
+            this.vencimientoField = value;
+        }
+    }
 }
 
 /// <remarks/>
@@ -1925,7 +2084,7 @@ public partial class NotaDebitoMediosDePago
 public partial class NotaDebitoNotificacion
 {
 
-    private string[] paraField;
+    private object[] paraField;
 
     private string deField;
 
@@ -1933,7 +2092,7 @@ public partial class NotaDebitoNotificacion
 
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute("Para")]
-    public string[] Para
+    public object[] Para
     {
         get
         {

@@ -18,6 +18,8 @@ public partial class Factura
 
     private FacturaLinea[] lineaField;
 
+    private FacturaImpuesto[] impuestosField;
+
     private FacturaRetenciones retencionesField;
 
     private FacturaTotales totalesField;
@@ -93,6 +95,20 @@ public partial class Factura
         set
         {
             this.lineaField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlArrayItemAttribute("Impuesto", IsNullable = false)]
+    public FacturaImpuesto[] Impuestos
+    {
+        get
+        {
+            return this.impuestosField;
+        }
+        set
+        {
+            this.impuestosField = value;
         }
     }
 
@@ -1627,6 +1643,149 @@ public partial class FacturaLineaCodificacionVendedor
         set
         {
             this.codigoArticuloField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.SerializableAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+public partial class FacturaImpuesto
+{
+
+    private FacturaImpuestoSubtotal subtotalField;
+
+    private string valorField;
+
+    private string tipoField;
+
+    private string nombreField;
+
+    private string redondeoField;
+
+    /// <remarks/>
+    public FacturaImpuestoSubtotal Subtotal
+    {
+        get
+        {
+            return this.subtotalField;
+        }
+        set
+        {
+            this.subtotalField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Valor
+    {
+        get
+        {
+            return this.valorField;
+        }
+        set
+        {
+            this.valorField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Tipo
+    {
+        get
+        {
+            return this.tipoField;
+        }
+        set
+        {
+            this.tipoField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Nombre
+    {
+        get
+        {
+            return this.nombreField;
+        }
+        set
+        {
+            this.nombreField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Redondeo
+    {
+        get
+        {
+            return this.redondeoField;
+        }
+        set
+        {
+            this.redondeoField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.SerializableAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+public partial class FacturaImpuestoSubtotal
+{
+
+    private string valorBaseField;
+
+    private string porcentajeField;
+
+    private string valorField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string ValorBase
+    {
+        get
+        {
+            return this.valorBaseField;
+        }
+        set
+        {
+            this.valorBaseField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Porcentaje
+    {
+        get
+        {
+            return this.porcentajeField;
+        }
+        set
+        {
+            this.porcentajeField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Valor
+    {
+        get
+        {
+            return this.valorField;
+        }
+        set
+        {
+            this.valorField = value;
         }
     }
 }

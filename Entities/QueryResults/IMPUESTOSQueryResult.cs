@@ -6,4 +6,6 @@ public class IMPUESTOSQueryResult
     public string IMPUESTOS_factor { get; set; }
     public string IMPUESTOS_estarifaunitaria { get; set; }
     public string IMPUESTOS_valor { get; set; }
+    public string IMPUESTOS_Nombreimpuesto { get; set; }
+    public object ITEMS_unidaddemedida { get; set; }
 }

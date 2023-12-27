@@ -1,10 +1,8 @@
-﻿using Business.Rest;
-using Business.Soap;
+﻿using Business.Mapper;
+using Business.Rest;
 using Log;
-using Model;
 using Model.Data;
 using Model.Query;
-using Model.XmlModel;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -42,34 +40,62 @@ namespace Business
                     return; //  TODO: 
                 //Get documents to process
                 var documentList = generalDataGeneration.GetFacturas();
+                var nc = documentList.Where(x => x.DATOS_GENERALES.NUM_Prefijo == "NC");
                 foreach (var doc in documentList)
                 {
-                    var xml = MapToXml(doc);
+                    dynamic xmlObj = null;
+                    string documentType = "";
+                    Type objectType = null;
+
+                    switch (doc.DATOS_GENERALES.NUM_Prefijo)
+                    {
+                        case "SETT":
+                            documentType = RestProcess.ApiConstants.FACTURA_UBL;
+                            xmlObj = new FacturaMapper().MapDocumentToXml(doc);
+                            objectType = typeof(Factura);
+                            break;
+                        case "NC":
+                            documentType = RestProcess.ApiConstants.NOTA_CREDITO_UBL;
+                            xmlObj = new NotaCreditoMapper().MapDocumentToXml(doc);
+                            objectType = typeof(NotaCredito);
+                            break;
+                        case "ND":
+                            documentType = RestProcess.ApiConstants.NOTA_DEBITO_UBL;
+                            xmlObj = new NotaDebitoMapper().MapDocumentToXml(doc);
+                            objectType = typeof(NotaDebito);
+                            break;
+                        case "SO":
+                        //documentType = RestProcess.ApiConstants.SOPORTE_UBL;
+                        //xmlObj = MapSupportToXml(doc);
+                        //objectType = typeof(Soporte);//TODO:
+                        //break;
+                        default:
+                            break;
+                    }
+
+                    if (xmlObj == null)
+                        continue;
 
                     var writer = new StringWriter();
-                    var serializer = new XmlSerializer(typeof(Factura));
-                    serializer.Serialize(writer, xml);
+                    var serializer = new XmlSerializer(objectType);
+                    serializer.Serialize(writer, xmlObj);
                     string xmlString = writer.ToString();
 
-                    var result = restProcess.SendDocumentToService(new Guid().ToString(), RestProcess.ApiConstants.FACTURA_UBL, xmlString).Result;
-                   
+                    var result = restProcess.SendDocumentToService(new Guid().ToString(), documentType, xmlString).Result;
+
                     if (result.Success)
                     {
-                        //Save in db
-                        dbquery.InsertSuccessData(doc.DATOS_GENERALES.DOCNUM, doc.DATOS_GENERALES.DOCNUM, null, null);
+                        var successResult = JsonConvert.DeserializeObject<FacturaResponse>(result.Response);
+                        dbquery.InsertSuccessData(doc.DATOS_GENERALES.DOCNUM, successResult.requestId, null, successResult.QR);
                         dbquery.DeleteRowsM();
                     }
                     else
                     {
-
+                        /*
                         Console.WriteLine(xmlString);
-                        Console.WriteLine(result.Response);
-                        Console.Read();
+                        Console.WriteLine(result.Response);*/
 
-                        //Save in db
                         dbquery.DeleteRowsM();
-                        //Si la respuesta del servicio es false (fail) se almacena en el log y no se cambia estado del documento para futuros procesos}
-                        CsvGeneratorLog.StoreLog($"Error al enviar el xml y el mensaje : {result.Response}", EventLogEntryType.Warning);
                         DataTable res = dbquery.GetSeriesName(doc.DATOS_GENERALES.DOCNUM);
                         if (res != null)
                         {
@@ -85,181 +111,5 @@ namespace Business
             }
         }
 
-
-        public Factura MapToXml(DocumentDto facturaDto)
-        {
-            var cabecera = new FacturaCabecera
-            {
-                TipoFactura = "FACTURE-UBL",
-                Numero = facturaDto.DATOS_GENERALES.numero,
-                FechaEmision = facturaDto.DATOS_GENERALES.fechadocumento,
-                Vencimiento = facturaDto.DATOS_GENERALES.fechavencimiento,
-                HoraEmision = facturaDto.DATOS_GENERALES.horadocumento,
-                Observaciones = facturaDto.DATOS_GENERALES.notas,
-                FormaDePago = facturaDto.DATOS_GENERALES.FP_idmetodopago,
-                TipoOperacion = facturaDto.DATOS_GENERALES.tipooperacion,
-                MonedaFactura = facturaDto.DATOS_GENERALES.moneda,
-                LineasDeFactura = facturaDto.ITEMS.Count().ToString(),
-                OrdenCompra = facturaDto.DATOS_GENERALES.ORDENC_codigo,
-                Ambiente = facturaDto.DATOS_GENERALES.idambiente,
-            };
-
-            var numeracionDIAN = new FacturaNumeracionDIAN
-            {
-                NumeroResolucion = facturaDto.DATOS_GENERALES.idnumeracion,
-                FechaInicio = facturaDto.DATOS_GENERALES.NUM_FechaIni,
-                FechaFin = facturaDto.DATOS_GENERALES.NUM_FechaFin,
-                ConsecutivoInicial = facturaDto.DATOS_GENERALES.NUM_ConsecutivoIni,
-                ConsecutivoFinal = facturaDto.DATOS_GENERALES.NUM_ConsecutivoFin,
-            };
-
-            var cliente = new FacturaCliente
-            {
-                NombreComercial = facturaDto.DATOS_GENERALES.ADQUIR_nombrecomercial,
-                RazonSocial = facturaDto.DATOS_GENERALES.ADQUIR_nombrecomercial,
-                TipoPersona = facturaDto.DATOS_GENERALES.ADQUIR_idtipopersona,
-                TipoRegimen = facturaDto.DATOS_GENERALES.ADQUIR_idactividadeconomica,
-                TipoIdentificacion = facturaDto.DATOS_GENERALES.ADQUIR_idtipodocumentoidentidad,
-                NumeroIdentificacion = facturaDto.DATOS_GENERALES.ADQUIR_identificacion,
-                DV = facturaDto.DATOS_GENERALES.ADQUIR_digitoverificacion,
-                Direccion = new FacturaClienteDireccion()
-                {
-                    CodigoMunicipio = facturaDto.DATOS_GENERALES.ADQUIR_idciudad,
-                    CodigoPais = facturaDto.DATOS_GENERALES.ADQUIR_Pais,
-                    CodigoPostal = facturaDto.DATOS_GENERALES.ADQUIR_codigopostal,
-                    Direccion = facturaDto.DATOS_GENERALES.ADQUIR_direccion,
-                    IdiomaPais = facturaDto.DATOS_GENERALES.ADQUIR_IdiomaPais,
-                    NombreCiudad = facturaDto.DATOS_GENERALES.ADQUIR_NombreCiudad,
-                    CodigoDepartamento = facturaDto.DATOS_GENERALES.ADQUIR_idDepartamento
-                },
-                DireccionFiscal = new FacturaClienteDireccionFiscal()
-                {
-                    //CodigoPais = "",
-                    IdiomaPais = "es",
-                    Direccion = facturaDto.DATOS_GENERALES.ADQUIR_DIR_direccion,
-                },
-                ObligacionesCliente = new FacturaClienteObligacionesCliente()
-                {
-                    CodigoObligacion = facturaDto.DATOS_GENERALES.ADQUIR_CodigoObligacion,
-                },
-                TributoCliente = new FacturaClienteTributoCliente()
-                {
-                    CodigoTributo = facturaDto.DATOS_GENERALES.ADQUIR_CodigoTributo,
-                    NombreTributo = facturaDto.DATOS_GENERALES.ADQUIR_NombreTributo,
-                }
-            };
-
-            var emisor = new FacturaEmisor
-            {
-                TipoPersona = facturaDto.DATOS_GENERALES.FACT_idtipopersona,
-                RazonSocial = facturaDto.DATOS_GENERALES.FACT_nombrecomercial,
-                TipoIdentificacion = facturaDto.DATOS_GENERALES.FACT_identificacion,
-                NumeroIdentificacion = facturaDto.DATOS_GENERALES.FACT_identificacion,
-                DV = facturaDto.DATOS_GENERALES.FACT_digitoverificacion,
-                ObligacionesEmisor = new FacturaEmisorObligacionesEmisor()
-                {
-                    CodigoObligacion = facturaDto.DATOS_GENERALES.FACT_obligaciones,
-                },
-                TributoEmisor = new FacturaEmisorTributoEmisor()
-                {
-                    CodigoTributo = facturaDto.DATOS_GENERALES.FACT_CodigoTributo,
-                    NombreTributo = facturaDto.DATOS_GENERALES.FACT_NombreTributo
-                },
-                Contacto = new FacturaEmisorContacto()
-                {
-                    Nombre = facturaDto.DATOS_GENERALES.FACT_nombres,
-                    Telefono = facturaDto.DATOS_GENERALES.FACT_telefono,
-                    Email = facturaDto.DATOS_GENERALES.FACT_emailcontacto,
-                    Notas = "",
-                }
-            };
-
-            var retenciones = new FacturaRetenciones();
-            foreach (var item in facturaDto.DATOS_EXTRA)
-            {
-                retenciones.Retencion = new FacturaRetencionesRetencion()
-                {
-                    Tipo = item.RETENCIONES_tipo,
-                    Valor = item.RETENCIONES_valor,
-                    Subtotal = new FacturaRetencionesRetencionSubtotal()
-                    {
-                        Porcentaje = item.RETENCIONES_factor,
-                        Valor = item.RETENCIONES_valor,
-                        ValorBase = item.RETENCIONES_base,
-                    },
-                };
-            }
-
-            var totales = new FacturaTotales()
-            {
-                BaseImponible = facturaDto.DATOS_GENERALES.TOTAL_baseimponible,
-                Bruto = facturaDto.DATOS_GENERALES.TOTAL_totalbruto,
-                BrutoMasImpuestos = facturaDto.DATOS_GENERALES.TOTAL_totalbrutoconimpuestos,
-                Cargos = facturaDto.DATOS_GENERALES.TOTAL_totalcargos,
-                General = facturaDto.DATOS_GENERALES.TOTAL_totalapagar,
-            };
-
-            var extensiones = new FacturaExtensiones();
-            var datosAdicionales = new List<FacturaExtensionesCampoAdicional>();
-            foreach (var item in facturaDto.DATOS_EXTRA)
-            {
-
-                datosAdicionales.Add(new FacturaExtensionesCampoAdicional
-                {
-                    Nombre = item.RETENCIONES_tipo,
-                    Valor = item.RETENCIONES_valor
-                });
-            };
-            extensiones.DatosAdicionales = datosAdicionales.ToArray();
-
-            var mediosDePago = new FacturaMediosDePago()
-            {
-                CodigoMedioPago = facturaDto.DATOS_GENERALES.FP_idmetodopago,
-            };
-
-            var notificacion = new FacturaNotificacion()
-            {
-                Tipo = "",
-                De = "",
-                Para = ""
-            };
-
-            var factura = new Factura();
-            var lineas = new List<FacturaLinea>();
-            foreach (var item in facturaDto.ITEMS)
-            {
-                lineas.Add(new FacturaLinea()
-                {
-                    CodificacionVendedor = new FacturaLineaCodificacionVendedor
-                    {
-                        CodigoArticulo = item.ITEMS_COD_codigo
-                    },
-                    Detalle = new FacturaLineaDetalle()
-                    {
-                        Cantidad = item.ITEMS_cantidad,
-                        CantidadBase = item.ITEMS_cantidadBase,
-                        Descripcion = item.ITEMS_descripcion,
-                        Nota = item.ITEMS_notas,
-                        PrecioUnitario = item.ITEMS_preciounitario,
-                        SubTotalLinea = item.ITEMS_totalitem,
-                        UnidadCantidadBase = item.ITEMS_COD_codigo,
-                        UnidadMedida = item.ITEMS_unidaddemedida,
-                        ValorTotalItem = item.ITEMS_totalitem,
-                    }
-                }) ;
-            }
-
-            factura.Cabecera = cabecera;
-            factura.Cliente = cliente;
-            factura.DocumentosAdicionalesReferencia = null;
-            factura.Emisor = emisor;
-            factura.Extensiones = extensiones;
-            factura.Linea = null;
-            factura.MediosDePago = mediosDePago;
-            factura.NumeracionDIAN = numeracionDIAN;
-            factura.Linea = lineas.ToArray();
-            factura.Totales = totales;
-            return factura;
-        }
     }
 }

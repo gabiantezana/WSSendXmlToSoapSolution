@@ -22,6 +22,9 @@ namespace Business.Rest
         public static class ApiConstants
         {
             public const string FACTURA_UBL = "FACTURA-UBL";
+            public const string NOTA_CREDITO_UBL = "NC-UBL";
+            public const string NOTA_DEBITO_UBL = "ND-UBL";
+            public const string SOPORTE_UBL = "FACTURA-UBL";
             public const string APPLICATION_JSON = "application/json";
             public const string X_TRACE_VALUE = "true";
             public static class Headers

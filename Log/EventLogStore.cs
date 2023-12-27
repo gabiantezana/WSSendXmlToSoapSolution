@@ -41,7 +41,7 @@ namespace Log
 
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
             }

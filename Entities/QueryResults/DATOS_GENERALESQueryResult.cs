@@ -83,5 +83,11 @@ public class DATOS_GENERALESQueryResult
     public string ADQUIR_NombreTributo { get; set; }
     public string FACT_CodigoTributo { get; set; }
     public string FACT_NombreTributo { get; set; }
-
+    public string ADQUIRIR_DIR_idPais { get; set; }
+    public string ADQUIR_DIR_idiomaPais { get; set; }
+    public string ADQUIR_DIR_Pais { get; set; }
+    public string FACT_TipoIdentificacion { get; set; }
+    public string ADQUIR_DIR_idDepartamento { get; set; }
+    public string idmediopago { get; set; }
+    public string TOTAL_totalimpuestos { get; set; }
 }

@@ -243,10 +243,7 @@ namespace Model.Query
                             "\"ITEMS_CARGO_idconcepto\", \"ITEMS_CARGO_escargo\", \"ITEMS_CARGO_descripcion\", \"ITEMS_CARGO_porcentaje\", \"ITEMS_CARGO_base\", \"ITEMS_CARGO_valor\", \"ITEMS_IMPUES_idimpuesto\", \"ITEMS_IMPUES_base\", " +
                             "\"ITEMS_IMPUES_factor\", \"ITEMS_IMPUES_estarifaunitaria\", \"ITEMS_IMPUES_valor\", \"ITEMS_DT_clave\", \"ITEMS_DT_valor\" from " + SCHEMA + ".\"ITEMS\"";
                 */
-                string queryString = "select \"DOCNUM\", \"ITEMS_COD_idestandar\", \"ITEMS_COD_nombreestandar\", \"ITEMS_COD_codigo\", \"ITEMS_descripcion\", \"ITEMS_notas\", \"ITEMS_cantidad\", \"ITEMS_cantidadporempaque\", " +
-                            "\"ITEMS_preciounitario\", \"ITEMS_unidaddemedida\", \"ITEMS_marca\", \"ITEMS_modelo\", \"ITEMS_codigovendedor\", \"ITEMS_subcodigovendedor\", \"ITEMS_idmandante\", \"ITEMS_regalo\", \"ITEMS_totalitem\", \"ITEMS_fechacompra\", \"ITEMS_formageneraciontransmision\",  " +
-                            "\"ITEMS_CARGO_idconcepto\", \"ITEMS_CARGO_escargo\", \"ITEMS_CARGO_descripcion\", \"ITEMS_CARGO_porcentaje\", \"ITEMS_CARGO_base\", \"ITEMS_CARGO_valor\", \"ITEMS_IMPUES_idimpuesto\", \"ITEMS_IMPUES_base\", " +
-                            "\"ITEMS_IMPUES_factor\", \"ITEMS_IMPUES_estarifaunitaria\", \"ITEMS_IMPUES_valor\", \"ITEMS_DT_clave\", \"ITEMS_DT_valor\" from " + SCHEMA + ".\"ITEMS\"";
+                string queryString = "select * from " + SCHEMA + ".\"ITEMS\"";
                 //using (connection = new SqlConnection(connectionString))
                 //{
                 //SqlCommand command = new SqlCommand(queryString, connection);

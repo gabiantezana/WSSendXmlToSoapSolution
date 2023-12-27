@@ -54,6 +54,9 @@
     <Compile Include="Interfaces\IGeneralProcess.cs" />
     <Compile Include="Interfaces\IRestProcess.cs" />
     <Compile Include="Interfaces\IXmlProcess.cs" />
+    <Compile Include="Mapper\NotaDebitoMapper.cs" />
+    <Compile Include="Mapper\NotaCreditoMapper.cs" />
+    <Compile Include="Mapper\FacturaMapper.cs" />
     <Compile Include="Mapper\MapperConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
